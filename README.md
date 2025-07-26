@@ -67,3 +67,9 @@
 ```
 uvicorn main:app --reload
 ```
+
+6. Тесты запускаются, например
+
+```
+pytest -s tests/test_airtable.py
+```
