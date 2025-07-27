@@ -40,13 +40,21 @@
     </section>
 
     <!-- Топ товары -->
-    <h2 class="text-2xl font-semibold mt-10 mb-4">🔥 Топ товары</h2>
+    <h2 class="text-2xl font-semibold mt-10 mb-4 px-4">🔥 Топ товары</h2>
     <div
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4"
     >
       {% for product in products %} {% if product.top %}
       <div class="bg-white shadow rounded p-4">
-        <img src="{{ product.photo_url }}" class="rounded mb-2" />
+        <div
+          class="w-full h-64 flex items-center justify-center overflow-hidden mb-2"
+        >
+          <img
+            src="{{ product.photo_url }}"
+            alt="{{ product.name }}"
+            class="object-contain w-full h-full"
+          />
+        </div>
         <h3>{{ product.name }}</h3>
         <p>{{ product.final_price }} Euro</p>
       </div>
@@ -54,18 +62,42 @@
     </div>
 
     <!-- Все товары -->
-    <h2 class="text-2xl font-semibold mt-10 mb-4">📦 Все товары</h2>
+    <h2 class="text-2xl font-semibold mt-10 mb-4 px-4">📦 Все товары</h2>
     <div
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4"
     >
       {% for product in products %}
       <div class="bg-white shadow rounded p-4">
-        <img src="{{ product.photo_url }}" class="rounded mb-2" />
+        <div
+          class="w-full h-64 flex items-center justify-center overflow-hidden mb-2"
+        >
+          <img
+            src="{{ product.photo_url }}"
+            alt="{{ product.name }}"
+            class="object-contain w-full h-full"
+          />
+        </div>
         <h3>{{ product.name }}</h3>
         <p>{{ product.final_price }} Euro</p>
       </div>
       {% endfor %}
     </div>
-    <
+
+    <!-- Футер -->
+    <footer class="bg-gray-100 mt-16 py-6">
+      <div class="max-w-7xl mx-auto px-4 text-center text-sm text-gray-600">
+        <p>
+          📞 Телефон:
+          <a href="tel:+1234567890" class="text-blue-600">+1 234 567 890</a>
+        </p>
+        <p>
+          📧 Email:
+          <a href="mailto:support@example.com" class="text-blue-600"
+            >support@example.com</a
+          >
+        </p>
+        <p class="mt-2">&copy; {{ now.year }} Enjoy Your Mood</p>
+      </div>
+    </footer>
   </body>
 </html>

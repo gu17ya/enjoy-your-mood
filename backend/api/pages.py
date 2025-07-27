@@ -2,6 +2,7 @@ from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from backend.airtable.airtable_client import AirtableClient
+from datetime import datetime
 import os
 
 router = APIRouter()
@@ -19,4 +20,5 @@ async def home(request: Request):
         "request": request,
         "products": products,
         "categories": categories,
+        "now": datetime.now()  
     })
