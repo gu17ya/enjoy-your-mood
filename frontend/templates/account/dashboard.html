@@ -1,0 +1,31 @@
+{% extends "base.html" %} {% block title %}Кабінет{% endblock %} {% block
+content %}
+<div class="max-w-4xl mx-auto py-10 px-4">
+  <h1 class="text-3xl font-bold mb-6">👋 Ласкаво просимо, {{ user.name }}!</h1>
+
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
+    <a
+      href="/{{ user.id }}/orders"
+      class="p-6 bg-white shadow rounded-lg hover:bg-blue-50 transition"
+    >
+      <h2 class="text-xl font-semibold mb-2">🧾 Замовлення</h2>
+      <p class="text-gray-600 text-sm">Перегляньте свої попередні замовлення</p>
+    </a>
+
+    <a
+      href="/{{ user.id }}/personal-information"
+      class="p-6 bg-white shadow rounded-lg hover:bg-blue-50 transition"
+    >
+      <h2 class="text-xl font-semibold mb-2">👤 Особисті дані</h2>
+      <p class="text-gray-600 text-sm">Оновіть своє ім’я, email або телефон</p>
+    </a>
+
+    <a
+      href="/logout"
+      class="p-6 bg-red-500 text-white shadow rounded-lg hover:bg-red-600 transition flex items-center justify-center"
+    >
+      <h2 class="text-xl font-semibold mb-0">🚪 Вийти</h2>
+    </a>
+  </div>
+</div>
+{% endblock %}

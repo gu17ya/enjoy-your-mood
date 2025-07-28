@@ -1,0 +1,80 @@
+{% extends "base.html" %} {% block title %}{{ product.name }}{% endblock %} {%
+block content %}
+<div class="max-w-4xl mx-auto py-10 px-4">
+  <a href="/" class="text-blue-600 hover:underline">← На главную</a>
+
+  <div
+    class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6 bg-white shadow rounded p-6"
+  >
+    {% if product.photo_url %}
+    <div
+      class="w-full h-80 bg-gray-50 flex items-center justify-center overflow-hidden rounded"
+    >
+      <img
+        src="{{ product.photo_url }}"
+        alt="{{ product.name }}"
+        class="object-contain h-full w-full"
+      />
+    </div>
+    {% endif %}
+
+    <div>
+      <h1 class="text-3xl font-bold mb-2">{{ product.name }}</h1>
+      <p class="text-gray-600 mb-4">
+        {{ product.description or "Нет описания" }}
+      </p>
+
+      <p class="text-lg font-semibold text-gray-800 mb-2">
+        💰 Цена: <span class="text-green-600">{{ product.final_price }} €</span>
+      </p>
+
+      <p class="mb-2">
+        🏷️ Категория:
+        <a
+          href="/category/{{ product.category | lower | urlencode }}"
+          class="text-blue-600 hover:underline"
+        >
+          {{ product.category }}
+        </a>
+      </p>
+
+      <p class="mb-2">
+        ✅ В наличии: {% if product.available %}
+        <span class="text-green-600 font-medium">Да</span>
+        {% else %}
+        <span class="text-red-600 font-medium">Нет</span>
+        {% endif %}
+      </p>
+
+      <p class="mb-4">
+        📦 Остаток на складе:
+        <span class="font-medium">
+          {{ product.quantity if product.quantity is not none else "нет данных"
+          }}
+        </span>
+      </p>
+
+      <!-- Простая форма добавления в корзину -->
+      <form method="post" action="/cart/add" class="space-y-3">
+        <input type="hidden" name="product_name" value="{{ product.name }}" />
+        <label class="block">
+          Количество:
+          <input
+            type="number"
+            name="quantity"
+            min="1"
+            value="1"
+            class="mt-1 block w-24 rounded border border-gray-300 p-2"
+          />
+        </label>
+        <button
+          type="submit"
+          class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+        >
+          Добавить в корзину 🛒
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

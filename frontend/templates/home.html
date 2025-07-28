@@ -1,103 +1,26 @@
-<!DOCTYPE html>
-<html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Главная — Магазин</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body class="bg-gray-50 text-gray-900">
-    <!-- Хедер -->
-    <header class="bg-white shadow-sm sticky top-0 z-10">
-      <div
-        class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center"
-      >
-        <!-- Категории -->
-        <nav class="flex space-x-4">
-          {% for cat in categories %}
-          <a
-            href="#"
-            class="text-sm text-gray-700 hover:text-blue-600 font-medium"
-            >{{ cat }}</a
-          >
-          {% endfor %}
-        </nav>
+{% extends "base.html" %} {% block title %}Главная — Магазин{% endblock %} {%
+block content %}
+<!-- Заголовок -->
+<section class="text-center py-10 bg-white shadow-inner">
+  <h1 class="text-4xl font-bold">Добро пожаловать!</h1>
+  <p class="text-gray-600 mt-2">Лучшая подборка товаров — только для вас.</p>
+</section>
 
-        <!-- Иконки -->
-        <div class="flex items-center space-x-4">
-          <a href="/login" title="Вход">🔑</a>
-          <a href="/cart" title="Корзина">🛒</a>
-        </div>
-      </div>
-    </header>
+<!-- Топ товары -->
+<h2 class="text-2xl font-semibold mt-10 mb-4 px-4">🔥 Топ товары</h2>
+<div
+  class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4"
+>
+  {% for product in products if product.top %} {% include
+  "components/product_card.html" %} {% endfor %}
+</div>
 
-    <!-- Заголовок -->
-    <section class="text-center py-10 bg-white shadow-inner">
-      <h1 class="text-4xl font-bold">Добро пожаловать!</h1>
-      <p class="text-gray-600 mt-2">
-        Лучшая подборка товаров — только для вас.
-      </p>
-    </section>
-
-    <!-- Топ товары -->
-    <h2 class="text-2xl font-semibold mt-10 mb-4 px-4">🔥 Топ товары</h2>
-    <div
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4"
-    >
-      {% for product in products %} {% if product.top %}
-      <div class="bg-white shadow rounded p-4">
-        <div
-          class="w-full h-64 flex items-center justify-center overflow-hidden mb-2"
-        >
-          <img
-            src="{{ product.photo_url }}"
-            alt="{{ product.name }}"
-            class="object-contain w-full h-full"
-          />
-        </div>
-        <h3>{{ product.name }}</h3>
-        <p>{{ product.final_price }} Euro</p>
-      </div>
-      {% endif %} {% endfor %}
-    </div>
-
-    <!-- Все товары -->
-    <h2 class="text-2xl font-semibold mt-10 mb-4 px-4">📦 Все товары</h2>
-    <div
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4"
-    >
-      {% for product in products %}
-      <div class="bg-white shadow rounded p-4">
-        <div
-          class="w-full h-64 flex items-center justify-center overflow-hidden mb-2"
-        >
-          <img
-            src="{{ product.photo_url }}"
-            alt="{{ product.name }}"
-            class="object-contain w-full h-full"
-          />
-        </div>
-        <h3>{{ product.name }}</h3>
-        <p>{{ product.final_price }} Euro</p>
-      </div>
-      {% endfor %}
-    </div>
-
-    <!-- Футер -->
-    <footer class="bg-gray-100 mt-16 py-6">
-      <div class="max-w-7xl mx-auto px-4 text-center text-sm text-gray-600">
-        <p>
-          📞 Телефон:
-          <a href="tel:+1234567890" class="text-blue-600">+1 234 567 890</a>
-        </p>
-        <p>
-          📧 Email:
-          <a href="mailto:support@example.com" class="text-blue-600"
-            >support@example.com</a
-          >
-        </p>
-        <p class="mt-2">&copy; {{ now.year }} Enjoy Your Mood</p>
-      </div>
-    </footer>
-  </body>
-</html>
+<!-- Все товары -->
+<h2 class="text-2xl font-semibold mt-10 mb-4 px-4">📦 Все товары</h2>
+<div
+  class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4"
+>
+  {% for product in products %} {% include "components/product_card.html" %} {%
+  endfor %}
+</div>
+{% endblock %}
