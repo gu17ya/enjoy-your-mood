@@ -4,9 +4,13 @@ __pycache__/
 *$py.class
 
 # Virtual environments
-venv/
+venv
 .env/
 .venv/
+.venv
+.venv/Lib
+.venv/Scripts
+
 
 # Pytest cache
 .pytest_cache/

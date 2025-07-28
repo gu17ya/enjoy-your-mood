@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}Enjoy Your Mood{% endblock %}</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-50 text-gray-900">
+    <!-- Хедер -->
+    <header class="bg-white shadow-sm sticky top-0 z-10">
+      <div
+        class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center"
+      >
+        <!-- Категории -->
+        <nav class="flex space-x-4 overflow-x-auto">
+          {% for cat in categories %}
+          <a
+            href="/category/{{ cat | lower | urlencode }}"
+            class="text-sm text-gray-700 hover:text-blue-600 font-medium whitespace-nowrap"
+          >
+            {{ cat }}
+          </a>
+          {% endfor %}
+        </nav>
+
+        <!-- Иконки -->
+        <div class="flex items-center space-x-4">
+          {% if request.cookies.user_id %}
+          <a href="/{{ request.cookies.user_id }}/dashboard" title="Кабінет">
+            <svg
+              class="inline w-6 h-6 text-blue-600 hover:text-blue-800 transition"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M5.121 17.804A8.937 8.937 0 0112 15c2.21 0 4.225.803 5.879 2.137M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+            </svg>
+          </a>
+          {% else %}
+          <a href="/login" class="text-blue-600 hover:underline">🔑 Увійти</a>
+          {% endif %}
+
+          <a href="/cart" title="Корзина">🛒</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Контент страницы -->
+    <main>{% block content %}{% endblock %}</main>
+
+    <!-- Футер -->
+    <footer class="bg-gray-100 mt-16 py-6">
+      <div class="max-w-7xl mx-auto px-4 text-center text-sm text-gray-600">
+        <p>
+          📞 Телефон:
+          <a href="tel:+1234567890" class="text-blue-600">+1 234 567 890</a>
+        </p>
+        <p>
+          📧 Email:
+          <a href="mailto:support@example.com" class="text-blue-600">
+            support@example.com
+          </a>
+        </p>
+        <p class="mt-2">&copy; {{ now.year }} Enjoy Your Mood</p>
+      </div>
+    </footer>
+  </body>
+</html>

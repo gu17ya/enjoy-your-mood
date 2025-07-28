@@ -1,0 +1,23 @@
+{% extends "base.html" %} {% block title %}Мої замовлення{% endblock %} {% block
+content %}
+<div class="max-w-4xl mx-auto py-10 px-4">
+  <h1 class="text-3xl font-bold mb-6">🧾 Ваші замовлення</h1>
+
+  {% if orders %}
+  <div class="space-y-4">
+    {% for order in orders %}
+    <div class="bg-white shadow rounded-lg p-4">
+      <h2 class="font-semibold text-lg">Замовлення №{{ order.id }}</h2>
+      <p class="text-gray-600 text-sm">Дата: {{ order.date }}</p>
+      <p class="text-gray-600 text-sm">Статус: {{ order.status }}</p>
+      <p class="text-gray-800 mt-2">
+        Сума: <strong>{{ order.total }} EUR</strong>
+      </p>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-gray-600">У вас поки немає замовлень.</p>
+  {% endif %}
+</div>
+{% endblock %}
