@@ -21,8 +21,6 @@
 ├── bots/
 │ ├── telegram_bot.py
 │ └── whatsapp_bot.py
-├── database/
-│ └── models.py
 ├── frontend/
 │ └── ...
 ├── .env

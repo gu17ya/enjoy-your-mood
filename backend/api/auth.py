@@ -1,21 +1,13 @@
-from fastapi import APIRouter, Request, Form, Depends, status, HTTPException
+from fastapi import APIRouter, Request, Form, status
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
-from sqlalchemy.orm import Session
-from backend.models.user_model import User
-from database.db import get_db
-from utils.security import hash_password, verify_password
+from fastapi import HTTPException
+from backend.services.user_service import UserService
 
 router = APIRouter()
-templates = Jinja2Templates(directory="frontend/templates") 
+templates = Jinja2Templates(directory="frontend/templates")
 
-# Получить пользователя по email
-def get_user_by_email(db: Session, email: str):
-    return db.query(User).filter(User.email == email).first()
-
-# Получить пользователя по телефону (если нужно)
-def get_user_by_phone(db: Session, phone: str):
-    return db.query(User).filter(User.phone == phone).first()
+service = UserService()
 
 # Страница логина (GET)
 @router.get("/login", response_class=HTMLResponse)
@@ -27,18 +19,17 @@ async def login_get(request: Request):
 async def login_post(
     request: Request,
     email: str = Form(...),
-    password: str = Form(...),
-    db: Session = Depends(get_db)
+    password: str = Form(...)
 ):
-    user = get_user_by_email(db, email)
-    if not user or not verify_password(password, user.hashed_password):
+    user = service.authenticate_user(email, password)
+    if not user:
         return templates.TemplateResponse("auth/login.html", {
             "request": request,
             "error": "Неверный логин или пароль"
         })
 
-    response = RedirectResponse(url=f"/{user.id}/dashboard", status_code=status.HTTP_302_FOUND)
-    response.set_cookie("user_email", email)
+    request.session["user_id"] = user["id"]
+    response = RedirectResponse(url=f"/{user['id']}/dashboard", status_code=status.HTTP_302_FOUND)
     return response
 
 # Страница регистрации (GET)
@@ -49,27 +40,17 @@ async def register_get(request: Request):
 # Регистрация (POST)
 @router.post("/register")
 async def register_post(
+    request: Request,
     name: str = Form(...),
     phone: str = Form(...),
     email: str = Form(...),
-    password: str = Form(...),
-    db: Session = Depends(get_db)
+    password: str = Form(...)
 ):
-    # Проверяем уникальность email и телефона
-    if get_user_by_email(db, email):
-        raise HTTPException(status_code=400, detail="Email уже занят")
-    if get_user_by_phone(db, phone):
-        raise HTTPException(status_code=400, detail="Телефон уже занят")
-
-    hashed_pw = hash_password(password)
-    new_user = User(
-        name=name,
-        phone=phone,
-        email=email,
-        hashed_password=hashed_pw
-    )
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-
-    return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
+    try:
+        service.register_user(email=email, password=password, name=name, phone=phone)
+        return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
+    except ValueError as e:
+        return templates.TemplateResponse("auth/register.html", {
+            "request": request,
+            "error": str(e)
+        })

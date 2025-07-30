@@ -1,33 +1,43 @@
-from sqlalchemy.orm import Session
-from backend.models.user_model import User
-from utils.security import hash_password, verify_password
-from sqlalchemy.exc import SQLAlchemyError
+from backend.airtable.airtable_client_users import AirtableUserClient
+from utils.security import verify_password
 
 class UserService:
-    def __init__(self, db: Session):
-        self.db = db
+    def __init__(self):
+        self.airtable = AirtableUserClient()
 
-    def register_user(self, email: str, password: str):
-        existing = self.db.query(User).filter_by(email=email).first()
-        if existing:
+    def register_user(self, name: str, email: str, phone: str, password: str):
+        existing_user = self.airtable.get_user_by_email(email)
+        if existing_user:
             raise ValueError("Пользователь уже существует")
 
-        hashed = hash_password(password)
-        new_user = User(email=email, hashed_password=hashed)
-        try:
-            self.db.add(new_user)
-            self.db.commit()
-            self.db.refresh(new_user)
-            return new_user
-        except SQLAlchemyError:
-            self.db.rollback()
-            raise RuntimeError("Ошибка при сохранении пользователя")
+        return self.airtable.create_user(name, email, phone, password)
 
     def authenticate_user(self, email: str, password: str):
-        user = self.db.query(User).filter_by(email=email).first()
-        if user and verify_password(password, user.hashed_password):
-            return user
-        return None
+        record = self.airtable.get_user_by_email(email)
+        if not record:
+            return None
 
-    def get_user_by_id(self, user_id: int):
-        return self.db.query(User).filter(User.id == user_id).first()
+        user = record["fields"]
+        stored_hashed_password = user.get("Password")
+        if not verify_password(password, stored_hashed_password):
+            return None
+
+        return {
+            "id": record["id"],
+            "name": user.get("Name"),
+            "email": user.get("Email"),
+            "phone": user.get("Phone")
+        }
+    
+    def get_user_by_id(self, user_id: str):
+        record = self.airtable.get_user_by_id(user_id)
+        if not record:
+            return None
+
+        user = record["fields"]
+        return {
+            "id": record["id"],
+            "name": user.get("Name"),
+            "email": user.get("Email"),
+            "phone": user.get("Phone")
+        }

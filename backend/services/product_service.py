@@ -1,5 +1,5 @@
 from backend.models.product import Product
-from ..airtable.airtable_client import AirtableClient
+from ..airtable.airtable_client_products import AirtableClient
 
 class ProductService:
     def __init__(self, airtable_client: AirtableClient):

@@ -1,5 +1,5 @@
 import os
-from backend.airtable.airtable_client import AirtableClient
+from backend.airtable.airtable_client_products import AirtableClient
 from dotenv import load_dotenv
 
 load_dotenv()

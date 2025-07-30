@@ -1,5 +1,5 @@
 # Byte-compiled / optimized / DLL files
-__pycache__/
+__pycache__
 *.py[cod]
 *$py.class
 
@@ -10,6 +10,8 @@ venv
 .venv
 .venv/Lib
 .venv/Scripts
+Lib
+site-packages
 
 
 # Pytest cache
@@ -26,10 +28,6 @@ build/
 dist/
 *.egg-info/
 .eggs/
-
-# Logs and databases
-*.log
-*.sqlite3
 
 # Environment variables files
 .env
